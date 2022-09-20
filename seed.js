@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { MONGODB_URI } = process.env;
+const axios = require('axios');
 
 // Add in mongoose
 const mongoose = require('mongoose');
@@ -15,9 +16,9 @@ const { Breweries } = require('./models')
 
 const seedingData = async () => {
     try {
-        const myBreweries = await fetch('https://api.openbrewerydb.org/breweries');
-        const allBreweries = await myBreweries.json();
-        const deletedBreweries = await Breweries.deleteMany({})
+        const myBreweries = await axios.get('https://api.openbrewerydb.org/breweries');
+        const allBreweries = myBreweries.data;
+        const deletedBreweries = await Breweries.deleteMany({});
         const addedBreweries = await Breweries.insertMany(allBreweries);
         console.log(deletedBreweries);
         console.log(addedBreweries);
