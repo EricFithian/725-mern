@@ -17,6 +17,7 @@ const { Breweries } = require('./models')
 const seedingData = async () => {
     try {
         const myBreweries = await axios.get('https://api.openbrewerydb.org/breweries');
+        // console.log(myBreweries.data);
         const allBreweries = myBreweries.data;
         const deletedBreweries = await Breweries.deleteMany({});
         const addedBreweries = await Breweries.insertMany(allBreweries);
