@@ -8,7 +8,18 @@ const { Breweries } = require('../models')
 
 router.get('/', async (req, res) => {
     try {
-        res.status(200).json(await Breweries.find({}));
+      console.log(req.query);
+      if(req.query.search) {
+        const breweryType = await Breweries.find({brewery_type: req.query.search});
+        const nameType = await Breweries.find({name: req.query.search})
+        const cityName = await Breweries.find({city: req.query.search})
+        const stateName = await Breweries.find({state: req.query.search})
+        const allFields = [...breweryType, ...nameType, ...cityName, ...stateName];
+        res.json(allFields)
+        // res.json(await Breweries.find({brewery_type: req.query.search}))
+      } else {
+        res.json(await Breweries.find({}))
+      }
     } catch(err) {
         console.log(err);
     }
