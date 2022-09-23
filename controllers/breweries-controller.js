@@ -10,12 +10,11 @@ router.get('/', async (req, res) => {
     try {
       console.log(req.query);
       if(req.query.search) {
-        const breweryType = await Breweries.find({brewery_type: req.query.search});
-        const nameType = await Breweries.find({name: req.query.search})
-        const cityName = await Breweries.find({city: req.query.search})
-        const stateName = await Breweries.find({state: req.query.search})
-        const allFields = [...breweryType, ...nameType, ...cityName, ...stateName];
-        res.json(allFields)
+        const brewerySearch = await Breweries.find({$or: 
+          [{brewery_type: req.query.search}, {name: req.query.search}, 
+            {city: req.query.search}, {street: req.query.search}, 
+            {state: req.query.search}, {postal_code: req.query.search}]});
+        res.json(brewerySearch)
         // res.json(await Breweries.find({brewery_type: req.query.search}))
       } else {
         res.json(await Breweries.find({}))
